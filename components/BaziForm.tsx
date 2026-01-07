@@ -20,8 +20,8 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
     startAge: '',
     firstDaYun: '',
     modelName: 'gemini-3-pro-preview',
-    apiBaseUrl: 'https://max.openai365.top/v1',
-    apiKey: '',
+    apiBaseUrl: (typeof process !== 'undefined' && process.env?.API_BASE_URL) || 'https://generativelanguage.googleapis.com/v1beta/openai',
+    apiKey: (typeof process !== 'undefined' && process.env?.API_KEY) || '',
   });
 
   const [formErrors, setFormErrors] = useState<{ modelName?: string, apiBaseUrl?: string, apiKey?: string }>({});

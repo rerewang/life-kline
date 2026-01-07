@@ -17,10 +17,12 @@ const getStemPolarity = (pillar: string): 'YANG' | 'YIN' => {
 export const generateLifeAnalysis = async (input: UserInput): Promise<LifeDestinyResult> => {
 
   const { apiKey, apiBaseUrl, modelName } = input;
+  const injectedApiKey = (typeof process !== 'undefined' && process.env?.API_KEY) || "";
+  const injectedBaseUrl = (typeof process !== 'undefined' && process.env?.API_BASE_URL) || "";
 
   // FIX: Trim whitespace which causes header errors if copied with newlines
-  const cleanApiKey = apiKey ? apiKey.trim() : "";
-  const cleanBaseUrl = apiBaseUrl ? apiBaseUrl.trim().replace(/\/+$/, "") : "";
+  const cleanApiKey = (apiKey || injectedApiKey).trim();
+  const cleanBaseUrl = (apiBaseUrl || injectedBaseUrl).trim().replace(/\/+$/, "");
   const targetModel = modelName && modelName.trim() ? modelName.trim() : "gemini-3-pro-preview";
 
   // 本地演示模式：当 API Key 为 'demo' 时，使用预生成的本地数据

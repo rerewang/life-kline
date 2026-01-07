@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
 
   // Prioritize API_KEY, but fallback to VITE_API_KEY if the user followed standard Vite naming conventions
   const apiKey = env.API_KEY || env.VITE_API_KEY;
+  const apiBaseUrl = env.API_BASE_URL || env.VITE_API_BASE_URL;
 
   return {
     plugins: [react()],
@@ -21,7 +22,8 @@ export default defineConfig(({ mode }) => {
     define: {
       // Safely stringify the key. If it's missing, it will be an empty string, 
       // which will be caught by the check in geminiService.ts
-      'process.env.API_KEY': JSON.stringify(apiKey || '')
+      'process.env.API_KEY': JSON.stringify(apiKey || ''),
+      'process.env.API_BASE_URL': JSON.stringify(apiBaseUrl || '')
     }
   };
 });
