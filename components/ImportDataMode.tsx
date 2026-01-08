@@ -5,7 +5,7 @@ import { Copy, CheckCircle, AlertCircle, Upload, Sparkles, MessageSquare, ArrowR
 import { BAZI_SYSTEM_INSTRUCTION } from '../constants';
 
 interface ImportDataModeProps {
-    onDataImport: (data: LifeDestinyResult) => void;
+    onDataImport: (data: LifeDestinyResult, name?: string) => void;
 }
 
 const ImportDataMode: React.FC<ImportDataModeProps> = ({ onDataImport }) => {
@@ -177,7 +177,7 @@ const ImportDataMode: React.FC<ImportDataModeProps> = ({ onDataImport }) => {
                 },
             };
 
-            onDataImport(result);
+            onDataImport(result, baziInfo.name);
         } catch (err: any) {
             setError(`解析失败：${err.message}`);
         }

@@ -1,21 +1,57 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import LifeKLineChart from './components/LifeKLineChart';
 import AnalysisResult from './components/AnalysisResult';
 import ImportDataMode from './components/ImportDataMode';
-import { LifeDestinyResult } from './types';
-import { Sparkles, AlertCircle, Download, Printer, Trophy, FileDown, FileUp } from 'lucide-react';
+import BaziForm from './components/BaziForm';
+import AnalysisHistory from './components/AnalysisHistory';
+import { LifeDestinyResult, AnalysisHistoryItem, UserInput } from './types';
+import { generateLifeAnalysis } from './services/geminiService';
+import { Sparkles, AlertCircle, Download, Printer, Trophy, FileDown, FileUp, Wand2 } from 'lucide-react';
+
+const HISTORY_STORAGE_KEY = 'lifeKlineHistory';
 
 const App: React.FC = () => {
   const [result, setResult] = useState<LifeDestinyResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>('');
+  const [inputMode, setInputMode] = useState<'import' | 'direct'>('import');
+  const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState<AnalysisHistoryItem[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as AnalysisHistoryItem[];
+        setHistory(parsed);
+      }
+    } catch (err) {
+      console.error('加载历史记录失败', err);
+    }
+  }, []);
+
+  const addHistoryItem = (data: LifeDestinyResult, name?: string) => {
+    const displayName = name?.trim() || '未命名';
+    const newItem: AnalysisHistoryItem = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: displayName,
+      createdAt: new Date().toISOString(),
+      result: data,
+    };
+    setHistory((prev) => {
+      const nextHistory = [newItem, ...prev].slice(0, 20);
+      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(nextHistory));
+      return nextHistory;
+    });
+  };
 
   // 处理导入数据
-  const handleDataImport = (data: LifeDestinyResult) => {
+  const handleDataImport = (data: LifeDestinyResult, name?: string) => {
     setResult(data);
-    setUserName('');
+    setUserName(name?.trim() || '');
     setError(null);
+    addHistoryItem(data, name);
   };
 
   // 导出为 JSON 文件
@@ -101,6 +137,8 @@ const App: React.FC = () => {
         };
 
         setResult(importedResult);
+        setUserName('');
+        addHistoryItem(importedResult);
         setError(null);
       } catch (err: any) {
         setError(`文件解析失败：${err.message}`);
@@ -113,6 +151,32 @@ const App: React.FC = () => {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDirectAnalysis = async (input: UserInput) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const analysisResult = await generateLifeAnalysis(input);
+      setResult(analysisResult);
+      setUserName(input.name?.trim() || '');
+      addHistoryItem(analysisResult, input.name);
+    } catch (err: any) {
+      setError(err.message || 'AI 分析失败，请稍后重试');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleHistorySelect = (item: AnalysisHistoryItem) => {
+    setResult(item.result);
+    setUserName(item.name === '未命名' ? '' : item.name);
+    setError(null);
+  };
+
+  const handleClearHistory = () => {
+    setHistory([]);
+    localStorage.removeItem(HISTORY_STORAGE_KEY);
   };
 
   const handleSaveHtml = () => {
@@ -299,27 +363,66 @@ const App: React.FC = () => {
               <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100 mb-6 text-left w-full max-w-lg">
                 <h3 className="font-bold text-indigo-800 mb-2">📝 使用方法</h3>
                 <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
-                  <li>填写八字信息，生成专属提示词</li>
-                  <li>复制提示词到任意 AI（ChatGPT、Claude、Gemini 等）</li>
-                  <li>将 AI 返回的 JSON 数据粘贴回来</li>
+                  <li>选择「JSON 导入」或「AI 直连」模式</li>
+                  <li>导入模式：复制提示词给 AI 后粘贴 JSON</li>
+                  <li>直连模式：填写四柱与 API Key 自动生成报告</li>
                 </ol>
               </div>
-
-              {/* 快速导入 JSON 文件 */}
-              <label className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group mb-4">
-                <FileUp className="w-6 h-6 text-emerald-500 group-hover:text-emerald-600" />
-                <span className="text-base font-medium text-gray-600 group-hover:text-emerald-700">已有 JSON 文件？点击直接导入</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportJsonFile}
-                  className="hidden"
-                />
-              </label>
             </div>
 
-            {/* 导入模式组件 */}
-            <ImportDataMode onDataImport={handleDataImport} />
+            <div className="flex items-center gap-2 bg-white border border-gray-200 p-1 rounded-full shadow-sm">
+              <button
+                type="button"
+                onClick={() => setInputMode('import')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  inputMode === 'import' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                JSON 导入
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputMode('direct')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  inputMode === 'direct' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                AI 直连
+              </button>
+            </div>
+
+            {inputMode === 'import' ? (
+              <>
+                <label className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group">
+                  <FileUp className="w-6 h-6 text-emerald-500 group-hover:text-emerald-600" />
+                  <span className="text-base font-medium text-gray-600 group-hover:text-emerald-700">已有 JSON 文件？点击直接导入</span>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImportJsonFile}
+                    className="hidden"
+                  />
+                </label>
+                <ImportDataMode onDataImport={handleDataImport} />
+              </>
+            ) : (
+              <div className="w-full max-w-2xl">
+                <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-indigo-700 flex items-start gap-2 mb-4">
+                  <Wand2 className="w-4 h-4 mt-0.5" />
+                  <div>
+                    <p className="font-medium">AI 直连模式</p>
+                    <p className="text-xs text-indigo-600 mt-1">支持 Gemini/OpenAI 兼容接口，输入 demo 可使用本地示例。</p>
+                  </div>
+                </div>
+                <BaziForm onSubmit={handleDirectAnalysis} isLoading={isLoading} />
+              </div>
+            )}
+
+            <AnalysisHistory
+              history={history}
+              onSelect={handleHistorySelect}
+              onClear={handleClearHistory}
+            />
 
             {error && (
               <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-100 max-w-md w-full animate-bounce-short">
