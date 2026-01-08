@@ -71,3 +71,10 @@ export interface LifeDestinyResult {
   chartData: KLinePoint[];
   analysis: AnalysisData;
 }
+
+export interface AnalysisHistoryItem {
+  id: string;
+  name: string;
+  createdAt: string;
+  result: LifeDestinyResult;
+}
