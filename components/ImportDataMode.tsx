@@ -191,7 +191,7 @@ const ImportDataMode: React.FC<ImportDataModeProps> = ({ onDataImport }) => {
         baziInfo.dayPillar && baziInfo.hourPillar && baziInfo.startAge && baziInfo.firstDaYun;
 
     return (
-        <div className="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+        <div className="w-full max-w-2xl bg-white/95 p-8 rounded-2xl shadow-2xl border border-white/40">
             {/* 步骤指示器 */}
             <div className="flex items-center justify-center gap-2 mb-8">
                 {[1, 2, 3].map((s) => (

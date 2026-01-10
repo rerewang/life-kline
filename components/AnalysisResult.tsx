@@ -70,7 +70,7 @@ const Card = ({ title, icon: Icon, content, score, colorClass, extraBadges }: an
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col h-full relative overflow-hidden">
+    <div className="bg-white/95 p-6 rounded-xl shadow-sm border border-slate-200/70 hover:shadow-md transition-shadow flex flex-col h-full relative overflow-hidden">
       <div className={`flex items-center justify-between mb-3 ${colorClass}`}>
         <div className="flex items-center gap-2">
           <Icon className="w-5 h-5" />
@@ -103,12 +103,12 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis }) => {
   return (
     <div className="w-full space-y-8 animate-fade-in-up">
       {/* Bazi Pillars */}
-      <div className="flex justify-center gap-2 md:gap-8 bg-gray-900 text-amber-50 p-6 rounded-xl shadow-lg overflow-x-auto">
+      <div className="flex justify-center gap-2 md:gap-8 bg-slate-900/90 text-amber-50 p-6 rounded-xl shadow-lg border border-amber-400/20 overflow-x-auto">
         {analysis.bazi.map((pillar, index) => {
           const labels = ['年柱', '月柱', '日柱', '时柱'];
           return (
             <div key={index} className="text-center min-w-[60px]">
-              <div className="text-xs text-gray-400 mb-1">{labels[index]}</div>
+              <div className="text-xs text-amber-200/70 mb-1">{labels[index]}</div>
               <div className="text-xl md:text-3xl font-serif-sc font-bold tracking-widest">{pillar}</div>
             </div>
           );
@@ -116,10 +116,10 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis }) => {
       </div>
 
       {/* Summary with Score */}
-      <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-xl border border-indigo-100 shadow-sm">
+      <div className="bg-white/95 p-6 rounded-xl border border-amber-200/60 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-          <h3 className="flex items-center gap-2 font-serif-sc font-bold text-xl text-indigo-900">
-            <ScrollText className="w-5 h-5" />
+          <h3 className="flex items-center gap-2 font-serif-sc font-bold text-xl text-slate-900">
+            <ScrollText className="w-5 h-5 text-amber-500" />
             命理总评
           </h3>
           <div className="w-full md:w-1/3">
