@@ -374,24 +374,34 @@ const App: React.FC = () => {
               </div>
             </div>
 
-              {/* 快速导入 JSON 文件 */}
-              <label className="flex items-center gap-3 px-6 py-3 bg-white/5 border-2 border-dashed border-emerald-400/40 rounded-xl cursor-pointer hover:border-emerald-300 hover:bg-emerald-400/10 transition-all group mb-4">
-                <FileUp className="w-6 h-6 text-emerald-300 group-hover:text-emerald-200" />
-                <span className="text-base font-medium text-slate-200 group-hover:text-emerald-200">已有 JSON 文件？点击直接导入</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportJsonFile}
-                  className="hidden"
-                />
-              </label>
+            <div className="flex flex-wrap justify-center gap-3 text-sm font-medium">
+              <button
+                type="button"
+                onClick={() => setInputMode('import')}
+                className={`px-4 py-2 rounded-full border transition-all ${inputMode === 'import'
+                  ? 'bg-amber-400/20 text-amber-200 border-amber-300/40'
+                  : 'bg-white/5 text-slate-300 border-white/10 hover:border-amber-300/40 hover:text-amber-200'
+                }`}
+              >
+                JSON 导入模式
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputMode('direct')}
+                className={`px-4 py-2 rounded-full border transition-all ${inputMode === 'direct'
+                  ? 'bg-indigo-400/20 text-indigo-100 border-indigo-300/40'
+                  : 'bg-white/5 text-slate-300 border-white/10 hover:border-indigo-300/40 hover:text-indigo-100'
+                }`}
+              >
+                AI 直连模式
+              </button>
             </div>
 
             {inputMode === 'import' ? (
               <>
-                <label className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group">
-                  <FileUp className="w-6 h-6 text-emerald-500 group-hover:text-emerald-600" />
-                  <span className="text-base font-medium text-gray-600 group-hover:text-emerald-700">已有 JSON 文件？点击直接导入</span>
+                <label className="flex items-center gap-3 px-6 py-3 bg-white/5 border-2 border-dashed border-emerald-400/40 rounded-xl cursor-pointer hover:border-emerald-300 hover:bg-emerald-400/10 transition-all group">
+                  <FileUp className="w-6 h-6 text-emerald-300 group-hover:text-emerald-200" />
+                  <span className="text-base font-medium text-slate-200 group-hover:text-emerald-200">已有 JSON 文件？点击直接导入</span>
                   <input
                     type="file"
                     accept=".json"
