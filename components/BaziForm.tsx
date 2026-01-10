@@ -79,10 +79,10 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
   }, [formData.yearPillar, formData.gender]);
 
   return (
-    <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+    <div className="w-full max-w-md bg-white/95 p-8 rounded-2xl shadow-2xl border border-white/40 backdrop-blur">
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-serif-sc font-bold text-gray-800 mb-2">八字排盘</h2>
-        <p className="text-gray-500 text-sm">请输入四柱与大运信息以生成分析</p>
+        <h2 className="text-3xl font-serif-sc font-bold text-slate-900 mb-2">八字排盘</h2>
+        <p className="text-slate-500 text-sm">请输入四柱与大运信息以生成分析</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -90,25 +90,25 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
         {/* Name & Gender */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">姓名 (可选)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">姓名 (可选)</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none"
               placeholder="姓名"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">性别</label>
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">性别</label>
+            <div className="flex bg-slate-100 rounded-lg p-1">
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, gender: Gender.MALE })}
                 className={`flex-1 py-1.5 rounded-md text-xs font-medium transition ${formData.gender === Gender.MALE
-                    ? 'bg-white text-indigo-700 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700'
                   }`}
               >
                 乾造 (男)
@@ -117,8 +117,8 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 type="button"
                 onClick={() => setFormData({ ...formData, gender: Gender.FEMALE })}
                 className={`flex-1 py-1.5 rounded-md text-xs font-medium transition ${formData.gender === Gender.FEMALE
-                    ? 'bg-white text-pink-700 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white text-rose-600 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700'
                   }`}
               >
                 坤造 (女)
@@ -128,7 +128,7 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
         </div>
 
         {/* Four Pillars Manual Input */}
-        <div className="bg-amber-50 p-4 rounded-xl border border-amber-100">
+        <div className="bg-amber-50/80 p-4 rounded-xl border border-amber-200/60">
           <div className="flex items-center gap-2 mb-3 text-amber-800 text-sm font-bold">
             <Sparkles className="w-4 h-4" />
             <span>输入四柱干支 (必填)</span>
@@ -136,7 +136,7 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
 
           {/* Birth Year Input - Added as requested */}
           <div className="mb-4">
-            <label className="block text-xs font-bold text-gray-600 mb-1">出生年份 (阳历)</label>
+            <label className="block text-xs font-bold text-slate-600 mb-1">出生年份 (阳历)</label>
             <input
               type="number"
               name="birthYear"
@@ -146,13 +146,13 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
               value={formData.birthYear}
               onChange={handleChange}
               placeholder="如: 1990"
-              className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white font-bold"
+              className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white font-bold"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">年柱 (Year)</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">年柱 (Year)</label>
               <input
                 type="text"
                 name="yearPillar"
@@ -160,11 +160,11 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 value={formData.yearPillar}
                 onChange={handleChange}
                 placeholder="如: 甲子"
-                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white text-center font-serif-sc font-bold"
+                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white text-center font-serif-sc font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">月柱 (Month)</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">月柱 (Month)</label>
               <input
                 type="text"
                 name="monthPillar"
@@ -172,11 +172,11 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 value={formData.monthPillar}
                 onChange={handleChange}
                 placeholder="如: 丙寅"
-                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white text-center font-serif-sc font-bold"
+                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white text-center font-serif-sc font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">日柱 (Day)</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">日柱 (Day)</label>
               <input
                 type="text"
                 name="dayPillar"
@@ -184,11 +184,11 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 value={formData.dayPillar}
                 onChange={handleChange}
                 placeholder="如: 戊辰"
-                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white text-center font-serif-sc font-bold"
+                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white text-center font-serif-sc font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">时柱 (Hour)</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">时柱 (Hour)</label>
               <input
                 type="text"
                 name="hourPillar"
@@ -196,21 +196,21 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 value={formData.hourPillar}
                 onChange={handleChange}
                 placeholder="如: 壬戌"
-                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white text-center font-serif-sc font-bold"
+                className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white text-center font-serif-sc font-bold"
               />
             </div>
           </div>
         </div>
 
         {/* Da Yun Manual Input */}
-        <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+        <div className="bg-indigo-50/80 p-4 rounded-xl border border-indigo-200/60">
           <div className="flex items-center gap-2 mb-3 text-indigo-800 text-sm font-bold">
             <TrendingUp className="w-4 h-4" />
             <span>大运排盘信息 (必填)</span>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">起运年龄 (虚岁)</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">起运年龄 (虚岁)</label>
               <input
                 type="number"
                 name="startAge"
@@ -220,11 +220,11 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 value={formData.startAge}
                 onChange={handleChange}
                 placeholder="如: 3"
-                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white text-center font-bold"
+                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none bg-white text-center font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">第一步大运</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">第一步大运</label>
               <input
                 type="text"
                 name="firstDaYun"
@@ -232,7 +232,7 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
                 value={formData.firstDaYun}
                 onChange={handleChange}
                 placeholder="如: 丁卯"
-                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white text-center font-serif-sc font-bold"
+                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none bg-white text-center font-serif-sc font-bold"
               />
             </div>
           </div>
@@ -243,45 +243,45 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
         </div>
 
         {/* API Configuration Section */}
-        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-          <div className="flex items-center gap-2 mb-3 text-gray-700 text-sm font-bold">
+        <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200">
+          <div className="flex items-center gap-2 mb-3 text-slate-700 text-sm font-bold">
             <Settings className="w-4 h-4" />
             <span>模型接口设置 (必填)</span>
           </div>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">使用模型</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">使用模型</label>
               <input
                 type="text"
                 name="modelName"
                 value={formData.modelName}
                 onChange={handleChange}
                 placeholder="gemini-3-pro-preview"
-                className={`w-full px-3 py-2 border rounded-lg text-xs font-mono outline-none ${formErrors.modelName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:ring-2 focus:ring-gray-400'}`}
+                className={`w-full px-3 py-2 border rounded-lg text-xs font-mono outline-none ${formErrors.modelName ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:ring-2 focus:ring-slate-400'}`}
               />
               {formErrors.modelName && <p className="text-red-500 text-xs mt-1">{formErrors.modelName}</p>}
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">API Base URL</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">API Base URL</label>
               <input
                 type="text"
                 name="apiBaseUrl"
                 value={formData.apiBaseUrl}
                 onChange={handleChange}
                 placeholder="https://max.openai365.top/v1"
-                className={`w-full px-3 py-2 border rounded-lg text-xs font-mono outline-none ${formErrors.apiBaseUrl ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:ring-2 focus:ring-gray-400'}`}
+                className={`w-full px-3 py-2 border rounded-lg text-xs font-mono outline-none ${formErrors.apiBaseUrl ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:ring-2 focus:ring-slate-400'}`}
               />
               {formErrors.apiBaseUrl && <p className="text-red-500 text-xs mt-1">{formErrors.apiBaseUrl}</p>}
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">API Key</label>
+              <label className="block text-xs font-bold text-slate-600 mb-1">API Key</label>
               <input
                 type="password"
                 name="apiKey"
                 value={formData.apiKey}
                 onChange={handleChange}
                 placeholder="sk-..."
-                className={`w-full px-3 py-2 border rounded-lg text-xs font-mono outline-none ${formErrors.apiKey ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:ring-2 focus:ring-gray-400'}`}
+                className={`w-full px-3 py-2 border rounded-lg text-xs font-mono outline-none ${formErrors.apiKey ? 'border-red-500 bg-red-50' : 'border-slate-300 focus:ring-2 focus:ring-slate-400'}`}
               />
               {formErrors.apiKey && <p className="text-red-500 text-xs mt-1">{formErrors.apiKey}</p>}
             </div>
@@ -291,7 +291,7 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-gradient-to-r from-indigo-900 to-gray-900 hover:from-black hover:to-black text-white font-bold py-3.5 rounded-xl shadow-lg transform transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-gradient-to-r from-slate-900 to-black hover:from-black hover:to-black text-white font-bold py-3.5 rounded-xl shadow-lg transform transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>

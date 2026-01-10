@@ -259,46 +259,50 @@ const App: React.FC = () => {
   }, [result]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
+    <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col items-center relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-80 w-80 translate-x-1/3 translate-y-1/4 rounded-full bg-amber-400/10 blur-3xl" />
+      </div>
       {/* Header */}
-      <header className="w-full bg-white border-b border-gray-200 py-6 sticky top-0 z-50 no-print">
+      <header className="w-full bg-slate-950/80 border-b border-white/10 py-5 sticky top-0 z-50 no-print backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-black text-white p-2 rounded-lg">
+            <div className="bg-amber-400/20 text-amber-200 p-2 rounded-lg border border-amber-300/30">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-serif-sc font-bold text-gray-900 tracking-wide">人生K线</h1>
-              <p className="text-xs text-gray-500 uppercase tracking-widest">Life Destiny K-Line</p>
+              <h1 className="text-2xl font-serif-sc font-bold text-white tracking-wide">人生K线</h1>
+              <p className="text-xs text-slate-400 uppercase tracking-[0.25em]">Life Destiny K-Line</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-500 font-medium bg-gray-100 px-3 py-1.5 rounded-full">
-            <Sparkles className="w-4 h-4 text-amber-500" />
+          <div className="flex items-center gap-2 text-sm text-amber-100 font-medium bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-400/30">
+            <Sparkles className="w-4 h-4 text-amber-300" />
             基于 AI 大模型驱动
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-7xl mx-auto px-4 py-8 md:py-12 flex flex-col gap-12">
+      <main className="w-full max-w-7xl mx-auto px-4 py-8 md:py-12 flex flex-col gap-12 relative z-10">
 
         {/* If no result, show intro and form */}
         {!result && (
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 animate-fade-in">
             <div className="text-center max-w-2xl flex flex-col items-center">
-              <h2 className="text-4xl md:text-5xl font-serif-sc font-bold text-gray-900 mb-6">
+              <h2 className="text-4xl md:text-5xl font-serif-sc font-bold text-white mb-6">
                 洞悉命运起伏 <br />
-                <span className="text-indigo-600">预见人生轨迹</span>
+                <span className="text-amber-300">预见人生轨迹</span>
               </h2>
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              <p className="text-slate-300 text-lg leading-relaxed mb-6">
                 结合<strong>传统八字命理</strong>与<strong>金融可视化技术</strong>，
                 将您的一生运势绘制成类似股票行情的K线图。
               </p>
 
               {/* 使用说明 */}
-              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100 mb-6 text-left w-full max-w-lg">
-                <h3 className="font-bold text-indigo-800 mb-2">📝 使用方法</h3>
-                <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+              <div className="bg-white/5 p-4 rounded-xl border border-white/10 mb-6 text-left w-full max-w-lg">
+                <h3 className="font-bold text-amber-200 mb-2">📝 使用方法</h3>
+                <ol className="text-sm text-slate-300 space-y-1 list-decimal list-inside">
                   <li>填写八字信息，生成专属提示词</li>
                   <li>复制提示词到任意 AI（ChatGPT、Claude、Gemini 等）</li>
                   <li>将 AI 返回的 JSON 数据粘贴回来</li>
@@ -306,9 +310,9 @@ const App: React.FC = () => {
               </div>
 
               {/* 快速导入 JSON 文件 */}
-              <label className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group mb-4">
-                <FileUp className="w-6 h-6 text-emerald-500 group-hover:text-emerald-600" />
-                <span className="text-base font-medium text-gray-600 group-hover:text-emerald-700">已有 JSON 文件？点击直接导入</span>
+              <label className="flex items-center gap-3 px-6 py-3 bg-white/5 border-2 border-dashed border-emerald-400/40 rounded-xl cursor-pointer hover:border-emerald-300 hover:bg-emerald-400/10 transition-all group mb-4">
+                <FileUp className="w-6 h-6 text-emerald-300 group-hover:text-emerald-200" />
+                <span className="text-base font-medium text-slate-200 group-hover:text-emerald-200">已有 JSON 文件？点击直接导入</span>
                 <input
                   type="file"
                   accept=".json"
@@ -322,7 +326,7 @@ const App: React.FC = () => {
             <ImportDataMode onDataImport={handleDataImport} />
 
             {error && (
-              <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-100 max-w-md w-full animate-bounce-short">
+              <div className="flex items-center gap-2 text-red-200 bg-red-500/10 px-4 py-3 rounded-lg border border-red-500/30 max-w-md w-full animate-bounce-short">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 <p className="text-sm font-bold">{error}</p>
               </div>
@@ -334,36 +338,36 @@ const App: React.FC = () => {
         {result && (
           <div className="animate-fade-in space-y-12">
 
-            <div className="flex flex-col md:flex-row justify-between items-end md:items-center border-b border-gray-200 pb-4 gap-4">
-              <h2 className="text-2xl font-bold font-serif-sc text-gray-800">
+            <div className="flex flex-col md:flex-row justify-between items-end md:items-center border-b border-white/10 pb-4 gap-4">
+              <h2 className="text-2xl font-bold font-serif-sc text-white">
                 {userName ? `${userName}的` : ''}命盘分析报告
               </h2>
 
               <div className="flex flex-wrap gap-3 no-print">
                 <button
                   onClick={handleExportJson}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white border border-emerald-600 rounded-lg hover:bg-emerald-700 transition-all font-medium text-sm shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500/90 text-white border border-emerald-400/40 rounded-lg hover:bg-emerald-500 transition-all font-medium text-sm shadow-sm"
                 >
                   <FileDown className="w-4 h-4" />
                   导出JSON
                 </button>
                 <button
                   onClick={handlePrint}
-                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white border border-indigo-600 rounded-lg hover:bg-indigo-700 transition-all font-medium text-sm shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-500/90 text-white border border-indigo-400/40 rounded-lg hover:bg-indigo-500 transition-all font-medium text-sm shadow-sm"
                 >
                   <Printer className="w-4 h-4" />
                   保存PDF
                 </button>
                 <button
                   onClick={handleSaveHtml}
-                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white border border-indigo-600 rounded-lg hover:bg-indigo-700 transition-all font-medium text-sm shadow-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-500/90 text-white border border-indigo-400/40 rounded-lg hover:bg-indigo-500 transition-all font-medium text-sm shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   保存网页
                 </button>
                 <button
                   onClick={() => setResult(null)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all font-medium text-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-white/5 text-slate-200 border border-white/10 rounded-lg hover:bg-white/10 transition-all font-medium text-sm"
                 >
                   ← 重新排盘
                 </button>
@@ -373,22 +377,22 @@ const App: React.FC = () => {
             {/* The Chart */}
             <section className="space-y-4 break-inside-avoid">
               <div className="flex flex-col gap-1">
-                <h3 className="text-xl font-bold text-gray-700 flex items-center gap-2">
-                  <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
+                <h3 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+                  <span className="w-1 h-6 bg-amber-400 rounded-full"></span>
                   流年大运走势图 (100年)
                 </h3>
                 {peakYearItem && (
-                  <p className="text-sm font-bold text-indigo-800 bg-indigo-50 border border-indigo-100 rounded px-2 py-1 inline-flex items-center gap-2 self-start mt-1">
-                    <Trophy className="w-3 h-3 text-amber-500" />
+                  <p className="text-sm font-bold text-amber-100 bg-amber-500/10 border border-amber-400/30 rounded px-2 py-1 inline-flex items-center gap-2 self-start mt-1">
+                    <Trophy className="w-3 h-3 text-amber-300" />
                     人生巅峰年份：{peakYearItem.year}年 ({peakYearItem.ganZhi}) - {peakYearItem.age}岁，评分 <span className="text-amber-600 text-lg">{peakYearItem.high}</span>
                   </p>
                 )}
               </div>
 
-              <p className="text-sm text-gray-500 mb-2 no-print">
-                <span className="text-green-600 font-bold">绿色K线</span> 代表运势上涨（吉），
-                <span className="text-red-600 font-bold">红色K线</span> 代表运势下跌（凶）。
-                <span className="text-red-500 font-bold">★</span> 标记为全盘最高运势点。
+              <p className="text-sm text-slate-300 mb-2 no-print">
+                <span className="text-emerald-300 font-bold">绿色K线</span> 代表运势上涨（吉），
+                <span className="text-rose-300 font-bold">红色K线</span> 代表运势下跌（凶）。
+                <span className="text-rose-300 font-bold">★</span> 标记为全盘最高运势点。
               </p>
               <LifeKLineChart data={result.chartData} />
             </section>
@@ -441,7 +445,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-gray-900 text-gray-400 py-8 mt-auto no-print">
+      <footer className="w-full bg-slate-950/90 text-slate-400 py-8 mt-auto no-print border-t border-white/10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} 人生K线 | 仅供娱乐与文化研究，请勿迷信</p>
         </div>
