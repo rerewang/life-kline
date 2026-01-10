@@ -5,11 +5,22 @@ import AnalysisResult from './components/AnalysisResult';
 import ImportDataMode from './components/ImportDataMode';
 import BaziForm from './components/BaziForm';
 import AnalysisHistory from './components/AnalysisHistory';
+import SocialLinks from './components/SocialLinks';
+import HexagramVisual from './components/HexagramVisual';
+import StarChartWheel from './components/StarChartWheel';
+import YearlySummaryDisplay from './components/YearlySummaryDisplay';
+import PremiumGate from './components/PremiumGate';
 import { LifeDestinyResult, AnalysisHistoryItem, UserInput } from './types';
 import { generateLifeAnalysis } from './services/geminiService';
 import { Sparkles, AlertCircle, Download, Printer, Trophy, FileDown, FileUp, Wand2 } from 'lucide-react';
+import { timeBasedHexagram } from './utils/hexagram';
+import { calculateSimpleBirthChart } from './utils/birthChart';
+import { generateYearlySummary } from './utils/yearlySummary';
+import { useUsageLimit } from './hooks/useUsageLimit';
 
 const HISTORY_STORAGE_KEY = 'lifeKlineHistory';
+
+type FeatureMode = 'bazi' | 'hexagram' | 'birthChart' | 'yearlySummary';
 
 const App: React.FC = () => {
   const [result, setResult] = useState<LifeDestinyResult | null>(null);
@@ -18,6 +29,9 @@ const App: React.FC = () => {
   const [inputMode, setInputMode] = useState<'import' | 'direct'>('import');
   const [isLoading, setIsLoading] = useState(false);
   const [history, setHistory] = useState<AnalysisHistoryItem[]>([]);
+  const [featureMode, setFeatureMode] = useState<FeatureMode>('bazi');
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
+  const { canUse, remainingFreeUses, incrementUsage, isPremium, upgradeToPremium } = useUsageLimit();
 
   useEffect(() => {
     try {
@@ -154,10 +168,16 @@ const App: React.FC = () => {
   };
 
   const handleDirectAnalysis = async (input: UserInput) => {
+    if (!canUse) {
+      setShowPremiumGate(true);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
       const analysisResult = await generateLifeAnalysis(input);
+      incrementUsage();
       setResult(analysisResult);
       setUserName(input.name?.trim() || '');
       addHistoryItem(analysisResult, input.name);
@@ -340,9 +360,17 @@ const App: React.FC = () => {
               <p className="text-xs text-slate-400 uppercase tracking-[0.25em]">Life Destiny K-Line</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-amber-100 font-medium bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-400/30">
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            基于 AI 大模型驱动
+          <div className="flex items-center gap-4">
+            {!isPremium && inputMode === 'direct' && (
+              <div className="text-xs text-slate-300 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                今日剩余: {remainingFreeUses}/{2}
+              </div>
+            )}
+            <div className="flex items-center gap-2 text-sm text-amber-100 font-medium bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-400/30">
+              <Sparkles className="w-4 h-4 text-amber-300" />
+              <span className="hidden sm:inline">基于 AI 大模型驱动</span>
+            </div>
+            <SocialLinks />
           </div>
         </div>
       </header>
@@ -371,6 +399,49 @@ const App: React.FC = () => {
                   <li>复制提示词到任意 AI（ChatGPT、Claude、Gemini 等）</li>
                   <li>将 AI 返回的 JSON 数据粘贴回来</li>
                 </ol>
+              </div>
+            </div>
+
+            {/* Feature Mode Selector */}
+            <div className="w-full max-w-3xl bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+              <p className="text-sm text-slate-300 mb-3 text-center font-medium">选择功能模式</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <button
+                  onClick={() => setFeatureMode('bazi')}
+                  className={`px-4 py-3 rounded-lg border transition-all text-sm font-medium ${featureMode === 'bazi'
+                    ? 'bg-amber-500/20 text-amber-200 border-amber-400/40 shadow-lg'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:border-amber-400/40'
+                  }`}
+                >
+                  八字命理
+                </button>
+                <button
+                  onClick={() => setFeatureMode('hexagram')}
+                  className={`px-4 py-3 rounded-lg border transition-all text-sm font-medium ${featureMode === 'hexagram'
+                    ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/40 shadow-lg'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:border-emerald-400/40'
+                  }`}
+                >
+                  六爻占卜
+                </button>
+                <button
+                  onClick={() => setFeatureMode('birthChart')}
+                  className={`px-4 py-3 rounded-lg border transition-all text-sm font-medium ${featureMode === 'birthChart'
+                    ? 'bg-indigo-500/20 text-indigo-200 border-indigo-400/40 shadow-lg'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:border-indigo-400/40'
+                  }`}
+                >
+                  星盘分析
+                </button>
+                <button
+                  onClick={() => setFeatureMode('yearlySummary')}
+                  className={`px-4 py-3 rounded-lg border transition-all text-sm font-medium ${featureMode === 'yearlySummary'
+                    ? 'bg-purple-500/20 text-purple-200 border-purple-400/40 shadow-lg'
+                    : 'bg-white/5 text-slate-300 border-white/10 hover:border-purple-400/40'
+                  }`}
+                >
+                  年度总结
+                </button>
               </div>
             </div>
 
@@ -445,7 +516,11 @@ const App: React.FC = () => {
 
             <div className="flex flex-col md:flex-row justify-between items-end md:items-center border-b border-white/10 pb-4 gap-4">
               <h2 className="text-2xl font-bold font-serif-sc text-white">
-                {userName ? `${userName}的` : ''}命盘分析报告
+                {userName ? `${userName}的` : ''}
+                {featureMode === 'bazi' && '命盘分析报告'}
+                {featureMode === 'hexagram' && '六爻占卜结果'}
+                {featureMode === 'birthChart' && '星盘分析报告'}
+                {featureMode === 'yearlySummary' && '年度运势总结'}
               </h2>
 
               <div className="flex flex-wrap gap-3 no-print">
@@ -479,34 +554,81 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* The Chart */}
-            <section className="space-y-4 break-inside-avoid">
-              <div className="flex flex-col gap-1">
-                <h3 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                  <span className="w-1 h-6 bg-amber-400 rounded-full"></span>
-                  流年大运走势图 (100年)
-                </h3>
-                {peakYearItem && (
-                  <p className="text-sm font-bold text-amber-100 bg-amber-500/10 border border-amber-400/30 rounded px-2 py-1 inline-flex items-center gap-2 self-start mt-1">
-                    <Trophy className="w-3 h-3 text-amber-300" />
-                    人生巅峰年份：{peakYearItem.year}年 ({peakYearItem.ganZhi}) - {peakYearItem.age}岁，评分 <span className="text-amber-600 text-lg">{peakYearItem.high}</span>
+            {featureMode === 'bazi' && (
+              <>
+                <section className="space-y-4 break-inside-avoid">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+                      <span className="w-1 h-6 bg-amber-400 rounded-full"></span>
+                      流年大运走势图 (100年)
+                    </h3>
+                    {peakYearItem && (
+                      <p className="text-sm font-bold text-amber-100 bg-amber-500/10 border border-amber-400/30 rounded px-2 py-1 inline-flex items-center gap-2 self-start mt-1">
+                        <Trophy className="w-3 h-3 text-amber-300" />
+                        人生巅峰年份:{peakYearItem.year}年 ({peakYearItem.ganZhi}) - {peakYearItem.age}岁,评分 <span className="text-amber-600 text-lg">{peakYearItem.high}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-sm text-slate-300 mb-2 no-print">
+                    <span className="text-emerald-300 font-bold">绿色K线</span> 代表运势上涨（吉）,
+                    <span className="text-rose-300 font-bold">红色K线</span> 代表运势下跌（凶）。
+                    <span className="text-rose-300 font-bold">★</span> 标记为全盘最高运势点。
                   </p>
-                )}
-              </div>
+                  <LifeKLineChart data={result.chartData} />
+                </section>
 
-              <p className="text-sm text-slate-300 mb-2 no-print">
-                <span className="text-emerald-300 font-bold">绿色K线</span> 代表运势上涨（吉），
-                <span className="text-rose-300 font-bold">红色K线</span> 代表运势下跌（凶）。
-                <span className="text-rose-300 font-bold">★</span> 标记为全盘最高运势点。
-              </p>
-              <LifeKLineChart data={result.chartData} />
-            </section>
+                <section id="analysis-result-container">
+                  <AnalysisResult analysis={result.analysis} />
+                </section>
+              </>
+            )}
 
-            {/* The Text Report */}
-            {/* Added ID for HTML extraction */}
-            <section id="analysis-result-container">
-              <AnalysisResult analysis={result.analysis} />
-            </section>
+            {featureMode === 'hexagram' && (
+              <section className="space-y-6">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <h3 className="text-xl font-bold text-emerald-100 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-6 bg-emerald-400 rounded-full"></span>
+                    本卦展示
+                  </h3>
+                  <HexagramVisual hexagram={timeBasedHexagram()} />
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <h3 className="text-xl font-bold text-slate-100 mb-4">占卜解读</h3>
+                  <p className="text-slate-300 leading-relaxed">
+                    六爻功能正在开发中。当前显示的是基于当前时间的起卦结果。
+                    完整功能将包括：手动起卦、变卦分析、爻辞详解等。
+                  </p>
+                </div>
+              </section>
+            )}
+
+            {featureMode === 'birthChart' && (
+              <section className="space-y-6">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <h3 className="text-xl font-bold text-indigo-100 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-6 bg-indigo-400 rounded-full"></span>
+                    星盘图示
+                  </h3>
+                  <StarChartWheel chart={calculateSimpleBirthChart(new Date())} />
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <h3 className="text-xl font-bold text-slate-100 mb-4">星盘解读</h3>
+                  <p className="text-slate-300 leading-relaxed">
+                    星盘分析功能正在开发中。当前显示的是基于当前时间的简化星盘。
+                    完整功能将包括：精确行星计算、宫位系统、相位分析、AI解读等。
+                  </p>
+                </div>
+              </section>
+            )}
+
+            {featureMode === 'yearlySummary' && result.chartData && (
+              <section>
+                <YearlySummaryDisplay 
+                  summary={generateYearlySummary(result.chartData, new Date().getFullYear())} 
+                />
+              </section>
+            )}
 
             {/* Print Only: Detailed Table to substitute interactive tooltips */}
             <div className="hidden print:block mt-8 break-before-page">
@@ -549,7 +671,13 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
+      <PremiumGate 
+        isOpen={showPremiumGate}
+        onClose={() => setShowPremiumGate(false)}
+        onUpgrade={upgradeToPremium}
+        remainingUses={remainingFreeUses}
+      />
+
       <footer className="w-full bg-slate-950/90 text-slate-400 py-8 mt-auto no-print border-t border-white/10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} 人生K线 | 仅供娱乐与文化研究，请勿迷信</p>

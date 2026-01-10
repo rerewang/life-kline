@@ -1,84 +1,27 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>人生K线 | 八字命理可视化</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@400;600&display=swap');
-      body {
-        font-family: 'Inter', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-        background-color: #0b0f19;
-      }
-      .font-serif-sc {
-        font-family: 'Noto Serif SC', serif;
-      }
-      /* Custom Scrollbar */
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 8px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #d1d5db;
-        border-radius: 4px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af;
-      }
-
-      /* Print Styles for Save Report */
-      @media print {
-        /* Hide UI elements not needed in the report */
-        .no-print, header, footer, button {
-          display: none !important;
-        }
-        
-        /* Reset layout for paper */
-        body { 
-          background-color: white !important; 
-          margin: 0 !important;
-          padding: 0 !important;
-        }
-        
-        main {
-          margin: 0 !important;
-          padding: 0 !important;
-          max-width: 100% !important;
-          box-shadow: none !important;
-        }
-
-        /* Ensure charts and colored bars print correctly */
-        * {
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-        
-        /* Ensure page breaks don't cut cards in half */
-        .break-inside-avoid {
-          page-break-inside: avoid;
-        }
-      }
-    </style>
-<script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
-    "recharts": "https://esm.sh/recharts@^3.5.1",
-    "vite": "https://esm.sh/vite@^7.2.7",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+    
+    <title>人生K线 | AI驱动的八字命理可视化分析工具</title>
+    <meta name="description" content="人生K线 - 结合传统八字命理与金融可视化技术，将您的命运绘制成K线图。AI驱动的专业分析，支持八字排盘、流年大运、人生巅峰预测。仅供娱乐与文化研究。">
+    <meta name="keywords" content="八字,命理,K线,AI分析,流年,大运,命盘,运势,人生轨迹,八字排盘">
+    <meta name="author" content="人生K线团队">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="人生K线 | 洞悉命运起伏，预见人生轨迹">
+    <meta property="og:description" content="AI驱动的八字命理可视化工具，将您的一生运势绘制成金融K线图，专业解读流年大运">
+    <meta property="og:url" content="https://lifekline.cn">
+    <meta property="og:site_name" content="人生K线">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="人生K线 | AI命理可视化">
+    <meta name="twitter:description" content="将你的命运绘制成K线图，AI解读你的人生巅峰">
+    
+    <meta name="theme-color" content="#0b0f19">
+    <link rel="canonical" href="https://lifekline.cn">
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>

@@ -146,7 +146,7 @@ const BaziForm: React.FC<BaziFormProps> = ({ onSubmit, isLoading }) => {
               value={formData.birthYear}
               onChange={handleChange}
               placeholder="如: 1990"
-              className="w-full px-3 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white font-bold"
+              className="w-full px-3 py-3 min-h-[44px] border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none bg-white font-bold"
             />
           </div>
 
